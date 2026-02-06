@@ -1,0 +1,51 @@
+const Joi = require("joi");
+
+module.exports.listingSchema = Joi.object({
+  listing: Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    price: Joi.number().min(0).required(),
+    location: Joi.string().required(),
+    country: Joi.string().required(),
+
+    category: Joi.string().valid(
+      "other",
+      "trending",
+      "rooms",
+      "iconic cities",
+      "mountain",
+      "amazing pools",
+      "camping",
+      "farms",
+      "arctic",
+      "boats",
+      "domes",
+    ),
+
+    image: Joi.object({
+      url: Joi.string().uri().required(),
+      filename: Joi.string().optional(),
+    }).required(),
+  }).required(),
+});
+
+module.exports.updateListingSchema = Joi.object({
+  listing: Joi.object({
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    price: Joi.number().min(0).required(),
+    location: Joi.string().required(),
+    country: Joi.string().required(),
+    image: Joi.object({
+      url: Joi.string().uri().optional(),
+      filename: Joi.string().optional(),
+    }).optional(), // ✅ FIX
+  }).required(),
+});
+
+module.exports.reviewSchema = Joi.object({
+  review: Joi.object({
+    rating: Joi.number().min(1).max(5).required(),
+    comment: Joi.string().required(),
+  }).required(),
+});

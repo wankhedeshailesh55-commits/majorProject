@@ -1,0 +1,151 @@
+<% layout("/layouts/boilerplate") %>
+
+<% block('head').append(`
+  <link rel="stylesheet" href="/css/filters.css">
+`) %>
+
+    <div id="filters">
+
+      <a href="/listings/category?category=trending">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <p>Trending</p> 
+            </div>
+        </a>
+
+      <a href="/listings/category?category=rooms">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-bed"></i>
+                </div>
+                <p>Bedrooms</p> 
+            </div>
+        </a>
+
+      <a href="/listings/category?category=iconic cities">
+            <div class="filter">
+                <div>
+                  <i class="fa-solid fa-mountain-city"></i>
+                </div>
+                <p>Iconic Cities</p>  
+            </div>
+        </a>
+
+      <a href="/listings/category?category=mountain">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-mountain"></i>
+                </div>
+                <p>Mountain</p>  
+            </div>
+        </a>
+
+      <a href="/listings/category?category=amazing pools">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-person-swimming"></i>
+                </div>
+                <p>Amazing Pools</p> 
+            </div>
+        </a>
+
+      <div id="filter-group">
+
+      <a href="/listings/category?category=camping">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-campground"></i>
+                </div>
+                 <p>Camping</p> 
+            </div>
+        </a>
+
+      <a href="/listings/category?category=farms">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-cow"></i>
+                </div>
+                <p>farms</p> 
+            </div>
+        </a>
+
+      <a href="/listings/category?category=arctic">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-snowman"></i>
+                </div>
+                <p>Arctic</p> 
+            </div>
+        </a>
+
+      <a href="/listings/category?category=boats">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-sailboat"></i>
+                </div>
+                <p>Boats</p> 
+            </div>
+        </a>
+
+      <a href="/listings/category?category=domes">
+            <div class="filter">
+                <div>
+                    <i class="fa-solid fa-landmark-dome"></i>
+                </div>
+                <p>Domes</p> 
+            </div>
+        </a>
+
+      </div>
+
+      <div id="see-filters" class="filter btn filters-see-more">
+        <div>
+          <i class="fa-solid fa-angle-right"></i>
+        </div>
+        <p>See more</p> 
+      </div>
+
+      <div id="see-filters-less" class="filter btn filters-see-less">
+        <div>
+          <i class="fa-solid fa-angle-left"></i>
+        </div>
+        <p>See less</p> 
+      </div>
+
+      <div class="tax-toggle">
+        <div class="form-check form-check-reverse form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+          <label class="form-check-label" for="switchCheckDefault">Display total after taxes</label>
+        </div>
+      </div>  
+    </div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% for(let listing of allListings){ %>
+  <a href="/listings/<%= listing._id %>" class="listing-link">
+    <div class="card col listing-card">
+      <img
+        src="<%=listing.image.url%>"
+        class="card-img-top"
+        alt="Listing_imege"
+        style="height: 20rem"
+      />
+      <div class="card-img-overlay"></div>
+      <div class="card-body">
+        <p class="card-text">
+          <b><%= listing.title %></b><br />
+          &#8377;<%= listing.price ? listing.price.toLocaleString("en-IN") :
+          "N/A" %>/night
+          <i class="tax-info">&nbsp;&nbsp;+18% GST</i>
+        </p>
+      </div>
+    </div>
+    <% } %>
+  </a>
+</div>
+
+<% block('scripts').append(`
+  <script src="/js/filters.js"></script>
+`) %>
