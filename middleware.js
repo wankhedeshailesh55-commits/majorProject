@@ -12,6 +12,7 @@ module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must be logged to wanderlust");
+    console.log("Not logged in");
     return res.redirect("/login");
   }
   next();
@@ -39,6 +40,7 @@ module.exports.validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(",");
+    console.log(errMsg);
     throw new ExpressError(400, errMsg);
   } else {
     next();

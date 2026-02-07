@@ -72,10 +72,16 @@ module.exports.createListing = async (req, res) => {
 
   const coords = await getCoordinates(newListing.location, newListing.country);
   if (!coords) {
+    console.log(
+      "Coordinates not found for:",
+      newListing.location,
+      newListing.country,
+    );
     req.flash("error", "Location not found. Please enter a valid address.!");
     return res.redirect("/listings/new");
   }
   newListing.cordinates = coords;
+  console.log(newListing);
 
   await newListing.save();
   req.flash("success", "New Listing Created!");
