@@ -1,5 +1,7 @@
 const Joi = require("joi");
 
+const Joi = require("joi");
+
 module.exports.listingSchema = Joi.object({
   listing: Joi.object({
     title: Joi.string().required(),
@@ -8,24 +10,21 @@ module.exports.listingSchema = Joi.object({
     location: Joi.string().required(),
     country: Joi.string().required(),
 
-    category: Joi.string().valid(
-      "other",
-      "trending",
-      "rooms",
-      "iconic cities",
-      "mountain",
-      "amazing pools",
-      "camping",
-      "farms",
-      "arctic",
-      "boats",
-      "domes",
-    ),
-
-    image: Joi.object({
-      url: Joi.string().uri().required(),
-      filename: Joi.string().optional(),
-    }).required(),
+    category: Joi.string()
+      .valid(
+        "other",
+        "trending",
+        "rooms",
+        "iconic cities",
+        "mountain",
+        "amazing pools",
+        "camping",
+        "farms",
+        "arctic",
+        "boats",
+        "domes",
+      )
+      .required(),
   }).required(),
 });
 

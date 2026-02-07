@@ -12,7 +12,6 @@ module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must be logged to wanderlust");
-    console.log("Not logged in");
     return res.redirect("/login");
   }
   next();
@@ -40,7 +39,6 @@ module.exports.validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(",");
-    console.log(errMsg);
     throw new ExpressError(400, errMsg);
   } else {
     next();
@@ -80,18 +78,24 @@ module.exports.isReviewAuthor = async (req, res, next) => {
 
 module.exports.getCoordinates = async (location, country) => {
   const finalLocation = `${location}, ${country}`;
-  const response = await axios.get(
-    "https://nominatim.openstreetmap.org/search",
-    {
-      params: { q: finalLocation, format: "json", limit: 1 },
-      headers: { "User-Agent": "majorProject" },
-    },
-  );
 
-  if (response.data.length === 0) return null;
+  try {
+    const response = await axios.get(
+      "https://nominatim.openstreetmap.org/search",
+      {
+        params: { q: finalLocation, format: "json", limit: 1 },
+        headers: { "User-Agent": "majorProject" },
+      },
+    );
 
-  return {
-    lat: response.data[0].lat,
-    lng: response.data[0].lon,
-  };
+    if (response.data.length === 0) return null;
+
+    return {
+      lat: response.data[0].lat,
+      lng: response.data[0].lon,
+    };
+  } catch (err) {
+    console.error("Error fetching coordinates:", err.message);
+    return null;
+  }
 };

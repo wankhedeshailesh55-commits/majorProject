@@ -63,6 +63,11 @@ module.exports.showListing = async (req, res) => {
 };
 
 module.exports.createListing = async (req, res) => {
+  if (!req.file) {
+    req.flash("error", "Image is required.");
+    return res.redirect("/listings/new");
+  }
+
   let url = req.file.path;
   let filename = req.file.filename;
 
@@ -71,17 +76,13 @@ module.exports.createListing = async (req, res) => {
   newListing.owner = req.user._id;
 
   const coords = await getCoordinates(newListing.location, newListing.country);
+
   if (!coords) {
-    console.log(
-      "Coordinates not found for:",
-      newListing.location,
-      newListing.country,
-    );
-    req.flash("error", "Location not found. Please enter a valid address.!");
+    req.flash("error", "Location not found. Please enter a valid address!");
     return res.redirect("/listings/new");
   }
+
   newListing.cordinates = coords;
-  console.log(newListing);
 
   await newListing.save();
   req.flash("success", "New Listing Created!");
