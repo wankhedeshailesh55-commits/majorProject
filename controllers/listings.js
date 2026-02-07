@@ -82,7 +82,7 @@ module.exports.createListing = async (req, res) => {
     return res.redirect("/listings/new");
   }
 
-  newListing.cordinates = coords;
+  newListing.coordinates = coords;
 
   await newListing.save();
   req.flash("success", "New Listing Created!");
@@ -104,26 +104,32 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateListing = async (req, res) => {
   let { id } = req.params;
-  let newListing = await Listing.findByIdAndUpdate(id, { ...req.body.listing });
 
-  if (typeof req.file !== "undefined") {
-    let url = req.file.path;
-    let filename = req.file.filename;
-    newListing.image = { filename, url };
+  let listing = await Listing.findByIdAndUpdate(
+    id,
+    { ...req.body.listing },
+    { new: true, runValidators: true },
+  );
+
+  if (req.file) {
+    listing.image = {
+      url: req.file.path,
+      filename: req.file.filename,
+    };
   }
 
-  if (newListing.location && newListing.country) {
-    const coords = await getCoordinates(
-      newListing.location,
-      newListing.country,
-    );
+  const { location, country } = req.body.listing;
+
+  if (location && country) {
+    const coords = await getCoordinates(location, country);
     if (!coords) {
-      req.flash("error", "Location not found. Please enter a valid address.!");
-      return res.redirect(`/listings/${newListing._id}/edit`);
+      req.flash("error", "Location not found. Please enter a valid address!");
+      return res.redirect(`/listings/${id}/edit`);
     }
-    newListing.cordinates = coords;
+    listing.coordinates = coords; // ✅ correct key
   }
-  await newListing.save();
+
+  await listing.save();
 
   req.flash("success", "Listing Updated Successfully!");
   res.redirect(`/listings/${id}`);

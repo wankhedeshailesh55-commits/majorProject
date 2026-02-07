@@ -25,13 +25,9 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
-  cordinates: {
-    lat: {
-      type: Number,
-    },
-    lng: {
-      type: Number,
-    },
+  coordinates: {
+    lat: Number,
+    lng: Number,
   },
   category: {
     type: String,
